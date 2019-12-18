@@ -195,7 +195,12 @@ open class MultiSlider: UIControl {
     }
 
     open override var intrinsicContentSize: CGSize {
-        let thumbSize = (thumbImage ?? defaultThumbImage)?.size ?? CGSize(width: margin, height: margin)
+        
+        //overriding thumbsize for a larger and consistent touch area
+        let thumbSize =  CGSize(width: margin, height: margin)
+        //let thumbSize = (thumbImage ?? defaultThumbImage)?.size ?? CGSize(width: margin, height: margin)
+
+
         switch orientation {
         case .vertical:
             return CGSize(width: thumbSize.width + margin, height: UIView.noIntrinsicMetric)
