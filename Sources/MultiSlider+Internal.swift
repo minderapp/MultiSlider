@@ -68,20 +68,14 @@ extension MultiSlider {
     }
 
     func setupTrackLayoutMargins() {
-        
-        //**overriding thumbsize for a larger and consistent touch area
         let thumbSize = CGSize(width: 64, height: 64)
-        //let thumbSize = (thumbImage ?? defaultThumbImage)?.size ?? CGSize(width: 2, height: 2)
-        
-        //**Commenting to prevent thumbs protuding outside the track
-        //let thumbDiameter = orientation == .vertical ? thumbSize.height : thumbSize.width
-        // let halfThumb = CGFloat(0)
-        //let halfThumb = thumbDiameter / 2 - 1 // 1 pixel for semi-transparent boundary
+        let thumbDiameter = orientation == .vertical ? thumbSize.height : thumbSize.width
+        let halfThumb = thumbDiameter / 2 - 1 // 1 pixel for semi-transparent boundary
         if orientation == .vertical {
-            trackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            trackView.layoutMargins = UIEdgeInsets(top: halfThumb, left: 0, bottom: halfThumb, right: 0)
             constrain(.width, to: max(thumbSize.width, trackWidth))
         } else {
-            trackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            trackView.layoutMargins = UIEdgeInsets(top: 0, left: halfThumb, bottom: 0, right: halfThumb)
             constrain(.height, to: max(thumbSize.height, trackWidth))
         }
     }
@@ -230,12 +224,10 @@ extension MultiSlider {
         slideView.removeFirstConstraint { $0.firstItem === thumbView && $0.firstAttribute == .center(in: orientation) }
         let thumbRelativeDistanceToMax = (maximumValue - thumbValue) / (maximumValue - minimumValue)
         if orientation == .horizontal {
-            
-            //**Adding diff of 16 to prevent thumbs protruding outside the track
             if thumbRelativeDistanceToMax < 1 {
-                slideView.constrain(thumbView, at: .centerX, to: slideView, at: .right,diff: -16, ratio: CGFloat(1 - thumbRelativeDistanceToMax))
+                slideView.constrain(thumbView, at: .centerX, to: slideView, at: .right, ratio: CGFloat(1 - thumbRelativeDistanceToMax))
             } else {
-                slideView.constrain(thumbView, at: .centerX, to: slideView, at: .left, diff: 16)
+                slideView.constrain(thumbView, at: .centerX, to: slideView, at: .left)
             }
         } else { // vertical orientation
             if thumbRelativeDistanceToMax.isNormal {
